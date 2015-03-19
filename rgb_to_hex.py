@@ -16,25 +16,13 @@ def get_rgb_from_file(input_file):
         print("Error: Input file does not exist")
         sys.exit(1)
 
-def main():
 
-    parser = argparse.ArgumentParser(description='Convert RGB to hexidecimal' +
-                                     'representation.')
-    parser.add_argument('rgb', metavar='N', nargs='*')
-    parser.add_argument('-i', '--input', help='Input file, with each RGB pair new line separated')
+def get_hex_list(rgb_list):
 
-    args = parser.parse_args()
+    hex_list = []
 
-    if args.input:
-        rgb_pairs = get_rgb_from_file(args.input)
-    elif args.rgb:
-        rgb_pairs = args.rgb
-    else:
-        print("Error: Did not receive any arguments.")
-        sys.exit(1)
-
-    for eachArg in rgb_pairs:
-        red, green, blue = eachArg.split(',')
+    for eachRGB in rgb_list:
+        red, green, blue = eachRGB.split(',')
 
         rgb_red = int(red)
         rgb_green = int(green)
@@ -56,7 +44,9 @@ def main():
             hex_string = '#%02x%02x%02x'.upper() % (rgb_red,
                                                     rgb_green,
                                                     rgb_blue)
-            print(hex_string)
+            hex_list.append(hex_string)
+
+    return hex_list
 
 
 def number_in_range(number):
@@ -64,6 +54,30 @@ def number_in_range(number):
         return True
     else:
         return False
+
+
+def main():
+
+    parser = argparse.ArgumentParser(description='Convert RGB to hexidecimal' +
+                                     'representation.')
+    parser.add_argument('rgb', metavar='N', nargs='*')
+    parser.add_argument('-i', '--input', help='Input file, with each RGB' +
+                        'pair new line separated')
+
+    args = parser.parse_args()
+
+    if args.input:
+        rgb_pairs = get_rgb_from_file(args.input)
+    elif args.rgb:
+        rgb_pairs = args.rgb
+    else:
+        print("Error: Did not receive any arguments.")
+        sys.exit(1)
+
+    hex_list = get_hex_list(rgb_pairs)
+
+    for eachHex in hex_list:
+        print(eachHex)
 
 
 if __name__ == '__main__':
