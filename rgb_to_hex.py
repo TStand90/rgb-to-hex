@@ -1,16 +1,39 @@
 import sys
 import argparse
+import os
 
+
+def get_rgb_from_file(input_file):
+    if os.path.exists(input_file):
+        rgb_list = []
+
+        with open(input_file) as f:
+            for line in f:
+                rgb_list.append(line)
+
+        return rgb_list
+    else:
+        print("Error: Input file does not exist")
+        sys.exit(1)
 
 def main():
 
     parser = argparse.ArgumentParser(description='Convert RGB to hexidecimal' +
                                      'representation.')
-    parser.add_argument('rgb', metavar='N', nargs='+')
+    parser.add_argument('rgb', metavar='N', nargs='*')
+    parser.add_argument('-i', '--input', help='Input file, with each RGB pair new line separated')
 
     args = parser.parse_args()
 
-    for eachArg in args.rgb:
+    if args.input:
+        rgb_pairs = get_rgb_from_file(args.input)
+    elif args.rgb:
+        rgb_pairs = args.rgb
+    else:
+        print("Error: Did not receive any arguments.")
+        sys.exit(1)
+
+    for eachArg in rgb_pairs:
         red, green, blue = eachArg.split(',')
 
         rgb_red = int(red)
